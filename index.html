@@ -7,9 +7,25 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="unicorn-root"></div>
-  <!-- Use CDN for unicornstudio.js if not present locally -->
-  <script src="https://cdn.jsdelivr.net/npm/unicornstudio@1.4.29/dist/unicornstudio.min.js"></script>
-  <script src="main.js"></script>
+  <div
+    class="unicorn-embed"
+    id="unicorn"
+    data-us-project-src="sandro-clinic-glass.json"
+    data-us-scale="1"
+    data-us-dpi="1.5"
+    data-us-lazyload="false"
+    data-us-alttext="Welcome to Unicorn Studio"
+    data-us-arialabel="This is a canvas scene"
+  ></div>
+  <script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js"></script>
+  <script>
+    UnicornStudio.init()
+      .then((scenes) => {
+        // Scenes are ready
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  </script>
 </body>
 </html>
