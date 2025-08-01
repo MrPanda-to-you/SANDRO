@@ -1,0 +1,17 @@
+# Build settings for Netlify
+[build]
+  publish = "."
+  
+# Headers for CORS and asset loading
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Content-Security-Policy = "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; img-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https:;"
+
+[[headers]]
+  for = "*.json"
+  [headers.values]
+    Content-Type = "application/json"
