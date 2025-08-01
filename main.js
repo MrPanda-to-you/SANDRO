@@ -1,5 +1,5 @@
 (async function () {
-  // Wait for DOM and UnicornStudio to be available
+  // Wait for DOM to be ready
   function ready() {
     return new Promise(resolve => {
       if (document.readyState === "complete" || document.readyState === "interactive") {
@@ -12,7 +12,7 @@
 
   await ready();
 
-  // Wait for UnicornStudio global
+  // Wait for UnicornStudio global to be available
   function unicornReady() {
     return new Promise(resolve => {
       if (window.UnicornStudio) return resolve();
@@ -27,17 +27,82 @@
 
   await unicornReady();
 
-  // Fetch the scene JSON
-  const response = await fetch('sandro-clinic-glass.json');
-  if (!response.ok) {
-    document.body.innerHTML = '<b>Failed to load scene JSON.</b>';
-    throw new Error('Failed to load sandro-clinic-glass.json');
-  }
-  const scene = await response.json();
+  try {
+    // Add the scene using the correct UnicornStudio API with full viewport settings
+    const scene = await window.UnicornStudio.addScene({
+      elementId: "unicorn-root", // Container element
+      fps: 60, // Smooth animation
+      scale: 1, // Full scale for maximum quality
+      dpi: window.devicePixelRatio || 1.5, // Auto-detect device pixel ratio
+      filePath: "./sandro-clinic-glass.json", // Scene file
+      lazyLoad: false, // Load immediately for better UX
+      altText: "Sandro Clinic Interactive Scene", // SEO optimization
+      ariaLabel: "Interactive Sandro Clinic experience with glass effects", // Accessibility
+      production: false, // Development mode
+      fixed: false, // Let scene be responsive, not fixed
+      interactivity: {
+        mouse: {
+          disableMobile: false, // Keep mouse interaction on mobile/touch
+          disabled: false // Enable all interactions
+        }
+      }
+    });
 
-  // Render the scene
-  window.UnicornStudio.render({
-    container: document.getElementById('unicorn-root'),
-    scene
-  });
+    console.log('UnicornStudio scene loaded successfully:', scene);
+
+    // Add responsive resize handler for optimal scaling
+    let resizeTimeout;
+    function handleResize() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (scene && scene.resize) {
+          scene.resize(); // UnicornStudio's built-in responsive resize
+          
+          // Force canvas to fill viewport after resize
+          const canvas = document.querySelector('#unicorn-root canvas');
+          if (canvas) {
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            canvas.style.objectFit = 'cover';
+          }
+          
+          console.log('Scene resized for viewport:', window.innerWidth, 'x', window.innerHeight);
+        }
+      }, 150); // Debounce resize events
+    }
+
+    // Listen for viewport changes
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', () => {
+      setTimeout(handleResize, 300); // Delay for orientation change completion
+    });
+
+    // Optional: Listen for visibility changes to pause/resume scene
+    document.addEventListener('visibilitychange', () => {
+      if (scene) {
+        if (document.hidden) {
+          scene.paused = true; // Pause when tab is hidden (performance)
+        } else {
+          scene.paused = false; // Resume when tab is visible
+        }
+      }
+    });
+
+    // Expose scene globally for debugging (remove in production)
+    window.sandroScene = scene;
+
+  } catch (error) {
+    console.error('Error loading UnicornStudio scene:', error);
+    const container = document.getElementById('unicorn-root');
+    if (container) {
+      container.innerHTML = `
+        <div class="error-container">
+          <h2>Scene Loading Error</h2>
+          <p><strong>Error:</strong> ${error.message}</p>
+          <p>Please check your network connection and try refreshing the page.</p>
+          <p><small>Viewport: ${window.innerWidth} × ${window.innerHeight}</small></p>
+        </div>
+      `;
+    }
+  }
 })();

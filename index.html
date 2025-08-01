@@ -2,30 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Unicorn Scene - One Pager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=no"/>
+  <meta name="description" content="Sandro Clinic - Interactive Experience" />
+  <meta name="theme-color" content="#f5f5f5" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="format-detection" content="telephone=no" />
+  <title>Sandro Clinic - Interactive Experience</title>
   <link rel="stylesheet" href="style.css" />
+  <!-- Prevent favicon 404 error -->
+  <link rel="icon" href="data:,">
+  <!-- Preload critical resources -->
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js" as="script">
+  <link rel="preload" href="sandro-clinic-glass.json" as="fetch" crossorigin>
 </head>
 <body>
-  <div
-    class="unicorn-embed"
-    id="unicorn"
-    data-us-project-src="sandro-clinic-glass.json"
-    data-us-scale="1"
-    data-us-dpi="1.5"
-    data-us-lazyload="false"
-    data-us-alttext="Welcome to Unicorn Studio"
-    data-us-arialabel="This is a canvas scene"
-  ></div>
+  <div id="unicorn-root" role="main" aria-label="Interactive Sandro Clinic experience"></div>
   <script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js"></script>
-  <script>
-    UnicornStudio.init()
-      .then((scenes) => {
-        // Scenes are ready
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  </script>
+  <script src="main.js"></script>
 </body>
 </html>
