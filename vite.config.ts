@@ -77,11 +77,16 @@ export default defineConfig(({ mode }) => {
             sourceMap: securityConfig.obfuscation.sourceMap,
             stringArray: securityConfig.obfuscation.stringArray,
             stringArrayThreshold: securityConfig.obfuscation.stringArrayThreshold,
-            // Additional security options
-            selfDefending: true,
-            splitStrings: true,
-            splitStringsChunkLength: 5,
-            unicodeEscapeSequence: false
+            // Phase 2: Advanced obfuscation features
+            stringArrayEncoding: securityConfig.obfuscation.stringArrayEncoding,
+            stringArrayRotate: securityConfig.obfuscation.stringArrayRotate,
+            stringArrayShuffle: securityConfig.obfuscation.stringArrayShuffle,
+            splitStrings: securityConfig.obfuscation.splitStrings,
+            splitStringsChunkLength: securityConfig.obfuscation.splitStringsChunkLength,
+            unicodeEscapeSequence: securityConfig.obfuscation.unicodeEscapeSequence,
+            selfDefending: securityConfig.obfuscation.selfDefending,
+            transformObjectKeys: securityConfig.obfuscation.transformObjectKeys,
+            reservedNames: securityConfig.obfuscation.reservedNames
           }
         })
       ] : [])

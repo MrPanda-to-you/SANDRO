@@ -12,6 +12,11 @@
     "bundle:baseline": "node scripts/bundle-monitor.js baseline",
     "bundle:compare": "node scripts/bundle-monitor.js compare",
     "bundle:performance": "node scripts/bundle-monitor.js performance",
+    "obfuscation:test": "node scripts/obfuscation-quality-test.js",
+    "phase2:test": "npm run build && npm run obfuscation:test",
+    "phase2:build": "node scripts/build-with-integrity.js",
+    "phase2:integrity": "node scripts/integrity-test.js",
+    "phase2:complete": "npm run phase2:build && npm run phase2:integrity",
     "analyze": "vite-bundle-analyzer"
   },
   "devDependencies": {

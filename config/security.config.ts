@@ -15,6 +15,16 @@ export interface SecurityConfig {
     sourceMap: boolean;
     stringArray: boolean;
     stringArrayThreshold: number;
+    // Phase 2: Advanced obfuscation features
+    stringArrayEncoding: string[];
+    stringArrayRotate: boolean;
+    stringArrayShuffle: boolean;
+    splitStrings: boolean;
+    splitStringsChunkLength: number;
+    unicodeEscapeSequence: boolean;
+    selfDefending: boolean;
+    transformObjectKeys: boolean;
+    reservedNames: string[];
   };
   bundling: {
     randomizeFileNames: boolean;
@@ -53,6 +63,16 @@ export const securityConfig = {
       sourceMap: true,
       stringArray: false,
       stringArrayThreshold: 0,
+      // Phase 2: Development settings (minimal obfuscation)
+      stringArrayEncoding: [],
+      stringArrayRotate: false,
+      stringArrayShuffle: false,
+      splitStrings: false,
+      splitStringsChunkLength: 10,
+      unicodeEscapeSequence: false,
+      selfDefending: false,
+      transformObjectKeys: false,
+      reservedNames: ['UnicornStudio', 'console', 'window', 'document'],
     },
     bundling: {
       randomizeFileNames: false,
@@ -89,6 +109,16 @@ export const securityConfig = {
       sourceMap: false,
       stringArray: true,
       stringArrayThreshold: 0.5,
+      // Phase 2: Staging settings (moderate obfuscation)
+      stringArrayEncoding: ['base64'],
+      stringArrayRotate: true,
+      stringArrayShuffle: true,
+      splitStrings: true,
+      splitStringsChunkLength: 8,
+      unicodeEscapeSequence: false,
+      selfDefending: true,
+      transformObjectKeys: true,
+      reservedNames: ['UnicornStudio'],
     },
     bundling: {
       randomizeFileNames: true,
@@ -114,17 +144,37 @@ export const securityConfig = {
       enabled: true,
       compact: true,
       controlFlowFlattening: true,
-      controlFlowFlatteningThreshold: 0.75,
+      controlFlowFlatteningThreshold: 1.0, // Maximum control flow obfuscation
       deadCodeInjection: true,
-      deadCodeInjectionThreshold: 0.4,
+      deadCodeInjectionThreshold: 0.8, // Increased dead code injection
       debugProtection: true,
-      debugProtectionInterval: 2000,
+      debugProtectionInterval: 1000,
       disableConsoleOutput: true,
       identifierNamesGenerator: 'hexadecimal' as const,
-      renameGlobals: false,
+      renameGlobals: true, // Enable global variable renaming
       sourceMap: false,
       stringArray: true,
-      stringArrayThreshold: 0.8,
+      stringArrayThreshold: 1.0, // Maximum string obfuscation
+      // Phase 2: Production settings (maximum obfuscation)
+      stringArrayEncoding: ['rc4'],
+      stringArrayRotate: true,
+      stringArrayShuffle: true,
+      stringArrayIndexShift: true,
+      stringArrayWrappersCount: 5,
+      stringArrayWrappersChainedCalls: true,
+      stringArrayWrappersParametersMaxCount: 4,
+      stringArrayWrappersType: 'function' as const,
+      stringArrayCallsTransform: true,
+      stringArrayCallsTransformThreshold: 1.0,
+      splitStrings: true,
+      splitStringsChunkLength: 2, // Even smaller chunks for maximum obfuscation
+      unicodeEscapeSequence: true,
+      selfDefending: true,
+      transformObjectKeys: true,
+      numbersToExpressions: true,
+      numbersToExpressionsThreshold: 1.0,
+      simplify: true,
+      reservedNames: [], // No reserved names in production
     },
     bundling: {
       randomizeFileNames: true,
