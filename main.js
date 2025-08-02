@@ -12,6 +12,18 @@
     console.warn('Asset security not available:', error.message);
   }
 
+  // Phase 4: Advanced Monitoring Integration
+  // Initialize security monitoring system
+  let securityMonitor = null;
+  
+  try {
+    const { getSecurityMonitor } = await import('./src/security/SecurityMonitor.js');
+    securityMonitor = getSecurityMonitor();
+    console.log('🛡️ Security monitoring initialized');
+  } catch (error) {
+    console.warn('Security monitoring not available:', error.message);
+  }
+
   // Wait for DOM to be ready
   function ready() {
     return new Promise(resolve => {
@@ -32,6 +44,16 @@
       console.log('✅ Asset protection active');
     } catch (error) {
       console.warn('Asset protection initialization failed:', error);
+    }
+  }
+
+  // Initialize security monitoring if available
+  if (securityMonitor) {
+    try {
+      securityMonitor.startMonitoring();
+      console.log('✅ Security monitoring active');
+    } catch (error) {
+      console.warn('Security monitoring initialization failed:', error);
     }
   }
 
