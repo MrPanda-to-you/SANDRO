@@ -17,6 +17,10 @@
     "phase2:build": "node scripts/build-with-integrity.js",
     "phase2:integrity": "node scripts/integrity-test.js",
     "phase2:complete": "npm run phase2:build && npm run phase2:integrity",
+    "phase3:obfuscate": "node scripts/asset-obfuscation.js",
+    "phase3:test": "node scripts/asset-security-test.js",
+    "phase3:build": "npm run build && npm run phase3:obfuscate",
+    "phase3:complete": "npm run phase3:build && npm run phase3:test",
     "analyze": "vite-bundle-analyzer"
   },
   "devDependencies": {

@@ -1,4 +1,17 @@
 (async function () {
+  // Phase 3: Asset Security Integration
+  // Initialize asset protection before loading any assets
+  let assetSecurity = null;
+  
+  // Import asset security (with fallback for development)
+  try {
+    const { getAssetSecurity } = await import('./src/security/AssetSecurityIntegration.js');
+    assetSecurity = getAssetSecurity();
+    console.log('🔐 Asset security initialized');
+  } catch (error) {
+    console.warn('Asset security not available:', error.message);
+  }
+
   // Wait for DOM to be ready
   function ready() {
     return new Promise(resolve => {
@@ -11,6 +24,16 @@
   }
 
   await ready();
+
+  // Initialize asset security if available
+  if (assetSecurity) {
+    try {
+      await assetSecurity.initialize();
+      console.log('✅ Asset protection active');
+    } catch (error) {
+      console.warn('Asset protection initialization failed:', error);
+    }
+  }
 
   // Wait for UnicornStudio global to be available
   function unicornReady() {
@@ -28,13 +51,25 @@
   await unicornReady();
 
   try {
+    // Protect scene file path if asset security is available
+    let sceneFilePath = "./sandro-clinic-glass.json";
+    
+    if (assetSecurity) {
+      try {
+        sceneFilePath = await assetSecurity.protectAsset(sceneFilePath);
+        console.log('🔒 Scene file protected');
+      } catch (error) {
+        console.warn('Scene protection failed, using original path:', error);
+      }
+    }
+
     // Add the scene using the correct UnicornStudio API with full viewport settings
     const scene = await window.UnicornStudio.addScene({
       elementId: "unicorn-root", // Container element
       fps: 60, // Smooth animation
       scale: 1, // Full scale for maximum quality
       dpi: window.devicePixelRatio || 1.5, // Auto-detect device pixel ratio
-      filePath: "./sandro-clinic-glass.json", // Scene file
+      filePath: sceneFilePath, // Protected scene file
       lazyLoad: false, // Load immediately for better UX
       altText: "Sandro Clinic Interactive Scene", // SEO optimization
       ariaLabel: "Interactive Sandro Clinic experience with glass effects", // Accessibility
@@ -49,6 +84,16 @@
     });
 
     console.log('UnicornStudio scene loaded successfully:', scene);
+
+    // Enable UnicornStudio protection if available
+    if (assetSecurity && scene) {
+      try {
+        await assetSecurity.loadProtectedModel(sceneFilePath, { scene });
+        console.log('🛡️ UnicornStudio protection enabled');
+      } catch (error) {
+        console.warn('UnicornStudio protection failed:', error);
+      }
+    }
 
     // Add responsive resize handler for optimal scaling
     let resizeTimeout;
